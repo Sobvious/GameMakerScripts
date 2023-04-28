@@ -1,0 +1,1 @@
+surface_depth_disable - 2D게임 만들땐 무조건 서피스에 쓰자
