@@ -2,13 +2,6 @@ D3DSurface constructor - scr_math3d
 
 macros - D3DSURF_TYPE_RIGHT  D3DSURF_TYPE_LOOKAT  D3DSURF_RIGHTHAND  D3DSURF_LEFTHAND
 
-Initialize()
-	After initialize, you can't draw images directly on the application surface. 
-	
-	so you can draw something draw something between BeforeSubmit and EndSubmit.
-	
-	It returns surface existance.
-
 UpdateLookMatrix()
 GenerateLookatMatrix()
 UpdatePerspectiveMatrix()
@@ -44,6 +37,8 @@ PaintersAlgorithm()
 Filter()
 SurfaceRegenerate()
 Surface()
+
+// var Getter|Setter
 GetControlType()
 SetControlType()
 GetHand()

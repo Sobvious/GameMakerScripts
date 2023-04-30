@@ -11,6 +11,8 @@
   },
   "defaultScriptType": 1,
   "Folders": [
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Sample","folderPath":"folders/Sample.yy",},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Sample0_2DInit","folderPath":"folders/Sample0_2DInit.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Scripts","folderPath":"folders/Scripts.yy",},
   ],
   "IncludedFiles": [],
@@ -22,15 +24,19 @@
   "resources": [
     {"id":{"name":"obj_graphic","path":"objects/obj_graphic/obj_graphic.yy",},},
     {"id":{"name":"obj_player","path":"objects/obj_player/obj_player.yy",},},
+    {"id":{"name":"rm_final","path":"rooms/rm_final/rm_final.yy",},},
+    {"id":{"name":"obj_sample0_floor","path":"objects/obj_sample0_floor/obj_sample0_floor.yy",},},
     {"id":{"name":"scr_d3dsurface","path":"scripts/scr_d3dsurface/scr_d3dsurface.yy",},},
+    {"id":{"name":"rm_sample0","path":"rooms/rm_sample0/rm_sample0.yy",},},
     {"id":{"name":"Tips","path":"notes/Tips/Tips.yy",},},
     {"id":{"name":"Help","path":"notes/Help/Help.yy",},},
+    {"id":{"name":"obj_sample0_graphicCamera","path":"objects/obj_sample0_graphicCamera/obj_sample0_graphicCamera.yy",},},
     {"id":{"name":"scr_math3d","path":"scripts/scr_math3d/scr_math3d.yy",},},
     {"id":{"name":"spr_texture","path":"sprites/spr_texture/spr_texture.yy",},},
-    {"id":{"name":"rm","path":"rooms/rm/rm.yy",},},
   ],
   "RoomOrderNodes": [
-    {"roomId":{"name":"rm","path":"rooms/rm/rm.yy",},},
+    {"roomId":{"name":"rm_sample0","path":"rooms/rm_sample0/rm_sample0.yy",},},
+    {"roomId":{"name":"rm_final","path":"rooms/rm_final/rm_final.yy",},},
   ],
   "TextureGroups": [
     {"resourceType":"GMTextureGroup","resourceVersion":"1.3","name":"Default","autocrop":true,"border":2,"compressFormat":"bz2","directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"targets":-1,},

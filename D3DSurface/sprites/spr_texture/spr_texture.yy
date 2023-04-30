@@ -25,8 +25,8 @@
   "nineSlice": null,
   "origin": 0,
   "parent": {
-    "name": "D3DSurface",
-    "path": "D3DSurface.yyp",
+    "name": "Sample0_2DInit",
+    "path": "folders/Sample0_2DInit.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {

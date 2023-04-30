@@ -8,7 +8,7 @@ function D3DSurface(width = window_get_width(), height = window_get_height()) co
 
 	function Initialize() {
 		
-		// End drawing on to application surface
+		// Stop drawing on to application surface
 		application_surface_draw_enable(false);
 		
 		// regenerate or resize surface
@@ -17,6 +17,10 @@ function D3DSurface(width = window_get_width(), height = window_get_height()) co
 		}
 		else {
 			surface_resize(m_viewsurf, m_viewsize[0], m_viewsize[1]);
+		}
+		
+		if surface_exists(m_viewsurf) {
+			SetVectorViewDefault();
 		}
 		
 		return surface_exists(m_viewsurf);
@@ -96,6 +100,7 @@ function D3DSurface(width = window_get_width(), height = window_get_height()) co
 		var _surf = Surface();
 		if surface_exists(_surf) {
 			surface_set_target(_surf);
+			m_private_matrixes = [matrix_get(matrix_world), matrix_get(matrix_view), matrix_get(matrix_projection)];
 			matrix_set(matrix_world, world_matrix);
 			matrix_set(matrix_view, m_matrix_lookat);
 			matrix_set(matrix_projection, m_matrix_projection);
@@ -106,10 +111,12 @@ function D3DSurface(width = window_get_width(), height = window_get_height()) co
 	
 	// Reset world matrix and targetting surface
 	function EndSubmit() {
-		matrix_set(matrix_world, matrix_build_identity());
-		matrix_set(matrix_view, matrix_build_identity());
-		matrix_set(matrix_projection, matrix_build_identity());
-		surface_reset_target();	
+		matrix_set(matrix_world, m_private_matrixes[0]);
+		matrix_set(matrix_view, m_private_matrixes[1]);
+		matrix_set(matrix_projection, m_private_matrixes[2]);
+		if surface_exists(surface_get_target()) {
+			surface_reset_target();	
+		}
 	}
 	
 	// Release before delete
@@ -138,15 +145,20 @@ function D3DSurface(width = window_get_width(), height = window_get_height()) co
 	}
 	
 	// Resize surface
-	function Resize(width, height) {
+	function Resize(width = window_get_width(), height = window_get_height()) {
 		SetViewsize([width, height]);
 		
-		if surface_exists(Surface()) {
-			surface_resize(Surface(), m_viewsize[0], m_viewsize[1]);
+		if surface_get_target() == Surface() {
+			show_debug_message("D3DSurface: Cannot resize during drawing");
 		}
-		else {
-			surface_free(Surface());
-			SurfaceRegenerate();
+		else{
+			if surface_exists(Surface()) {
+				surface_resize(Surface(), m_viewsize[0], m_viewsize[1]);
+			}
+			else {
+				surface_free(Surface());
+				SurfaceRegenerate();
+			}
 		}
 		
 		return surface_exists(Surface());
@@ -267,6 +279,13 @@ function D3DSurface(width = window_get_width(), height = window_get_height()) co
 		m_vector_eye = eye_vector;
 		m_vector_right = right_vector;
 		m_vector_up = up_vector;		
+	}
+	
+	function SetVectorViewDefault() {
+		SetControlType(D3DSURF_TYPE_RIGHT);
+		m_vector_eye = [m_viewsize[0]/2.0, m_viewsize[1]/2.0, 100.0];
+		m_vector_right = [1.0, 0.0, 0.0];
+		m_vector_up = [0.0, -1.0, 0.0];;			
 	}
 	
 	// Set Perspective information
@@ -413,12 +432,13 @@ function D3DSurface(width = window_get_width(), height = window_get_height()) co
 	function GetViewsize() {
 		return m_viewsize;
 	}
+
 	
 	// variables
 	m_viewsize = [width, height];
 	m_viewsurf = noone;
 	m_controltype = D3DSURF_TYPE_RIGHT;	
-	m_is_righthand = D3DSURF_LEFTHAND;
+	m_is_righthand = D3DSURF_RIGHTHAND;
 	
 	// vectors
 	m_vector_eye = [0.0, 0.0, 0.0];
@@ -439,4 +459,8 @@ function D3DSurface(width = window_get_width(), height = window_get_height()) co
 	m_matrix_projection = matrix_build_identity();
 	m_matrix_projection_previous = m_matrix_projection;
 	
+	m_private_matrixes = [matrix_get(matrix_world), matrix_get(matrix_view), matrix_get(matrix_projection)];
+	
+	Initialize();
+
 }

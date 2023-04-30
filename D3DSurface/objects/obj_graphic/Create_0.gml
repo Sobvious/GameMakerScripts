@@ -11,9 +11,10 @@ Create = function() {
 	// Init 3D Surface for Game
 	gSurf3D.Initialize();
 	gSurf3D.SetVectorView([0.0, 0.0, 240.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]);
-	gSurf3D.SetPerspectiveInfo(gMath3D.HFovToVFov(90.0, 640.0, 540.0), 640.0, 540.0);
+	gSurf3D.SetPerspectiveInfo(gMath3D.HFovToVFov(90.0, 640.0, 480.0), 640.0, 480.0);
 	gSurf3D.SetProjectionInfo(0.1, 32000.0);
 	gSurf3D.SetHand(D3DSURF_RIGHTHAND);
+	gSurf3D.Filter();
 	
 	// Init 2D Surface for UI
 	gSurfUI.Initialize();
@@ -58,7 +59,6 @@ Step = function(deltaTime = delta_time/1000000.0) {
 	gSurf3D.Yaw(_look[1]*deltaTime);
 	gSurf3D.Roll(_look[2]*deltaTime);
 	
-	
 	// Update Matrixes
 	gSurf3D.UpdateLookMatrix();
 	gSurf3D.UpdatePerspectiveMatrix();
@@ -86,12 +86,15 @@ Present = function() {
 }
 
 Release = function() {
+	// Rlease Game Surf
 	gSurf3D.Release();
 	delete gSurf3D;
 	
+	// Release UI surf constructor
 	gSurfUI.Release();
 	delete gSurfUI;
 	
+	// Release math
 	delete gMath3D;
 }
 
