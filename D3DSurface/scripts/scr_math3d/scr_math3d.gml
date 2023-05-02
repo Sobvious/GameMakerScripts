@@ -147,6 +147,36 @@ function Math3D() constructor {
 			0.0, 0.0, -zn/(zf-zn), 1.0
 		];
 	}
+	
+	function MatrixOrthoOffCenterLH(w, h, zn, zf) {
+		var l = -w/2.0;
+		var r = +w/2.0;
+		var b = -h/2.0;
+		var t = +h/2.0;
+		
+		return [
+			2.0/(r-l)	,	0.0,			0.0,			0.0,
+			0.0			,	2.0/(t-b),		0.0,			0.0,
+			0.0,		,	0.0,			1.0/(zf-zn),	0.0,
+			(l+r)/(l-r)	,	(t+b)/(b-t),	zn/(zn-zf),		1.0
+		];
+		
+	}
+	
+	function MatrixOrthoOffCenterRH(w, h, zn, zf) {
+		var l = -w/2.0;
+		var r = +w/2.0;
+		var b = -h/2.0;
+		var t = +h/2.0;
+		
+		return [
+			2.0/(r-l)	,	0.0,			0.0,			0.0,
+			0.0			,	2.0/(t-b),		0.0,			0.0,
+			0.0,		,	0.0,			1.0/(zn-zf),	0.0,
+			(l+r)/(l-r)	,	(t+b)/(b-t),	zn/(zn-zf),		1.0
+		];
+		
+	}
 
 	function MatrixScaling(scale) {
 		return [
