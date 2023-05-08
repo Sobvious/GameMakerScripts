@@ -182,6 +182,23 @@ function D3DSurface(width = window_get_width(), height = window_get_height()) co
 		draw_surface_ext(Surface(), pos[0], pos[1], scale, scale, 0.0, c_white, 1.0);
 	}
 	
+	function ScreenPosToWorld(pos_screen) {
+		
+		var _mat = matrix_multiply(matrix_multiply(m_matrix_lookat, m_matrix_projection),gMath3D.MatrixViewportFlip(m_viewsize[0], m_viewsize[1], 0.0, 0.0, 0.0, 1.0));
+		_mat = gMath3D.MatrixInverse(_mat);
+		return gMath3D.Vec4TransformCoord(_mat, [pos_screen[0], pos_screen[1], 1.0, 1.0]);
+		
+	}
+	
+	function WorldPosToScreen(pos_world) {
+		
+		pos_world = gMath3D.Vec4TransformCoord(m_matrix_lookat, [pos_world[0], pos_world[1], 1.0, 1.0]);
+		pos_world = gMath3D.Vec4TransformCoord(m_matrix_projection, pos_world);
+		pos_world = gMath3D.Vec4TransformCoord(gMath3D.MatrixViewportFlip(m_viewsize[0], m_viewsize[1], 0.0, 0.0, 0.0, 1.0), pos_world);
+		
+		return pos_world;
+	}
+	
 	// show variables
 	function Debug(x, y) {
 		var height = string_height("A")+3.0;
@@ -285,7 +302,10 @@ function D3DSurface(width = window_get_width(), height = window_get_height()) co
 		SetControlType(D3DSURF_TYPE_RIGHT);
 		m_vector_eye = [m_viewsize[0]/2.0, m_viewsize[1]/2.0, 100.0];
 		m_vector_right = [1.0, 0.0, 0.0];
-		m_vector_up = [0.0, -1.0, 0.0];;			
+		m_vector_up = [0.0, 1.0, 0.0];	
+		if os_type == os_windows {
+			m_vector_up = [0.0, -1.0, 0.0];	
+		}	
 	}
 	
 	// Set Perspective information
@@ -335,7 +355,7 @@ function D3DSurface(width = window_get_width(), height = window_get_height()) co
 	
 	// Surface Regenerate function you can use it but usually used like an private member
 	function SurfaceRegenerate() {
-		m_viewsurf = surface_create(m_viewsize[0], m_viewsize[1], surface_rgba8unorm);
+		m_viewsurf = surface_create(m_viewsize[0], m_viewsize[1]);
 	}
 	
 	// get surface id

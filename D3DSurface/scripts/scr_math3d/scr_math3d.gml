@@ -157,7 +157,7 @@ function Math3D() constructor {
 		return [
 			2.0/(r-l)	,	0.0,			0.0,			0.0,
 			0.0			,	2.0/(t-b),		0.0,			0.0,
-			0.0,		,	0.0,			1.0/(zf-zn),	0.0,
+			0.0			,	0.0,			1.0/(zf-zn),	0.0,
 			(l+r)/(l-r)	,	(t+b)/(b-t),	zn/(zn-zf),		1.0
 		];
 		
@@ -172,7 +172,7 @@ function Math3D() constructor {
 		return [
 			2.0/(r-l)	,	0.0,			0.0,			0.0,
 			0.0			,	2.0/(t-b),		0.0,			0.0,
-			0.0,		,	0.0,			1.0/(zn-zf),	0.0,
+			0.0			,	0.0,			1.0/(zn-zf),	0.0,
 			(l+r)/(l-r)	,	(t+b)/(b-t),	zn/(zn-zf),		1.0
 		];
 		
@@ -249,10 +249,10 @@ function Math3D() constructor {
 	function MatrixInverse(matrix) {
 		
 	var
-      a00 = matrix[0][0], a01 = matrix[0][1], a02 = matrix[0][2], a03 = matrix[0][3],
-      a10 = matrix[1][0], a11 = matrix[1][1], a12 = matrix[1][2], a13 = matrix[1][3],
-      a20 = matrix[2][0], a21 = matrix[2][1], a22 = matrix[2][2], a23 = matrix[2][3],
-      a30 = matrix[3][0], a31 = matrix[3][1], a32 = matrix[3][2], a33 = matrix[3][3],
+      a00 = matrix[0], a01 = matrix[1], a02 = matrix[2], a03 = matrix[3],
+      a10 = matrix[4], a11 = matrix[5], a12 = matrix[6], a13 = matrix[7],
+      a20 = matrix[8], a21 = matrix[9], a22 = matrix[10], a23 = matrix[11],
+      a30 = matrix[12], a31 = matrix[13], a32 = matrix[14], a33 = matrix[15],
 
       b00 = a00 * a11 - a01 * a10,
       b01 = a00 * a12 - a02 * a10,
@@ -288,6 +288,7 @@ function Math3D() constructor {
       (a20 * b03 - a21 * b01 + a22 * b00)/ det] ;
 	}
 	
+	
 	function MatrixViewport(dwWidth, dwHeight, dwX, dwY, dvMinZ, dvMaxZ) {
 		return [
 			dwWidth/2.0,	0.0,				0.0,			0.0,
@@ -296,7 +297,17 @@ function Math3D() constructor {
 			dwX+dwWidth/2.0,dwY+dwHeight/2.0,	dvMinZ,			1.0
 		];
 	}
-	
+
+	// Game Maker used to use flip one
+	function MatrixViewportFlip(dwWidth, dwHeight, dwX, dwY, dvMinZ, dvMaxZ) {
+		return [
+			dwWidth/2.0,	0.0,				0.0,			0.0,
+			0.0,			+dwHeight/2.0,		0.0,			0.0,
+			0.0,			0.0,				dvMaxZ-dvMinZ,	0.0,
+			dwX+dwWidth/2.0,dwY+dwHeight/2.0,	dvMinZ,			1.0
+		];
+	}
+
 	function MatrixViewport2(dwWidth, dwHeight, dwX, dwY, dvMinZ, dvMaxZ) {
 		return [
 			dwWidth/2.0,	0.0,				0.0,			0.0,
