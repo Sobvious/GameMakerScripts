@@ -93,6 +93,7 @@ function D3DSurface(width = window_get_width(), height = window_get_height()) co
 		}
 		
 		return m_matrix_projection;
+	
 	}
 	
 	// Set world matrix and target surface, This function usually use right before submit something (=drawing shapes)
@@ -182,21 +183,43 @@ function D3DSurface(width = window_get_width(), height = window_get_height()) co
 		draw_surface_ext(Surface(), pos[0], pos[1], scale, scale, 0.0, c_white, 1.0);
 	}
 	
-	function ScreenPosToWorld(pos_screen) {
+	function ScreenPosToWorldOrthography(pos_screen) {
 		
-		var _mat = matrix_multiply(matrix_multiply(m_matrix_lookat, m_matrix_projection),gMath3D.MatrixViewportFlip(m_viewsize[0], m_viewsize[1], 0.0, 0.0, 0.0, 1.0));
-		_mat = gMath3D.MatrixInverse(_mat);
-		return gMath3D.Vec4TransformCoord(_mat, [pos_screen[0], pos_screen[1], 1.0, 1.0]);
+		pos_screen = [pos_screen[0]-m_viewsize[0]/2.0, pos_screen[1]-m_viewsize[1]/2.0];
+		pos_screen = [pos_screen[0], pos_screen[1]];
+		var _world = m_vector_eye;
+		
+		_world = gMath3D.Vec3Add(_world, gMath3D.Vec3Multiply(m_vector_right, pos_screen[0]));
+		_world = gMath3D.Vec3Add(_world, gMath3D.Vec3Multiply(m_vector_up, -pos_screen[1]));
+		
+		return _world;
+		
+	}
+	
+	function ScreenPosToWorldPerspective(pos_screen, distance = 1.0) {
+		
+		pos_screen = [(pos_screen[0]-m_viewsize[0]/2.0)/m_viewsize[0], (pos_screen[1]-m_viewsize[1]/2.0)/m_viewsize[1]];
+		
+		var _world = gMath3D.Vec3Add(m_vector_eye, gMath3D.Vec3Multiply(SurfGame.GetFacing(), distance));
+		var _widthMax = tan(gMath3D.VFovToHFov(m_perspective_fov, m_viewsize[0], m_viewsize[1])/2.0)*2.0*distance;
+		var _heightMax = tan(m_perspective_fov/2.0)*2.0*distance;
+		
+		pos_screen = [pos_screen[0]*_widthMax, pos_screen[1]*_heightMax];
+		
+		_world = gMath3D.Vec3Add(_world, gMath3D.Vec3Multiply(m_vector_right, pos_screen[0]));
+		_world = gMath3D.Vec3Add(_world, gMath3D.Vec3Multiply(m_vector_up, -pos_screen[1]));
+		
+		return _world;
 		
 	}
 	
 	function WorldPosToScreen(pos_world) {
 		
-		pos_world = gMath3D.Vec4TransformCoord(m_matrix_lookat, [pos_world[0], pos_world[1], 1.0, 1.0]);
-		pos_world = gMath3D.Vec4TransformCoord(m_matrix_projection, pos_world);
-		pos_world = gMath3D.Vec4TransformCoord(gMath3D.MatrixViewportFlip(m_viewsize[0], m_viewsize[1], 0.0, 0.0, 0.0, 1.0), pos_world);
+		var pos_screen = gMath3D.Vec4TransformCoord(m_matrix_lookat, [pos_world[0], pos_world[1], pos_world[2], 1.0]);
+		pos_screen = gMath3D.Vec4TransformCoord(m_matrix_projection, pos_world);
+		pos_screen = gMath3D.Vec4TransformCoord(gMath3D.MatrixViewportFlip(m_viewsize[0], m_viewsize[1], 0.0, 0.0, 0.0, 1.0), pos_world);
 		
-		return pos_world;
+		return pos_screen;
 	}
 	
 	// show variables
